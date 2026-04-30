@@ -16,8 +16,7 @@ const containerStyle = {
 //   lat: 22.3039,
 //   lng: 70.8022,
 // };
-
-const key = "AIzaSyAxXgbUDcRWvutzlGQCn60XFLx3Or4Zupo"
+const key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
 
 const MapMock = (props) => {
   const { className = '', isMini = false, locations = [], callback, agentLocation } = props;
@@ -62,7 +61,7 @@ const MapMock = (props) => {
 
   const center = useMemo(() => {
     if (agentLocation) {
-        return { lat: parseFloat(agentLocation.lat), lng: parseFloat(agentLocation.lng) };
+      return { lat: parseFloat(agentLocation.lat), lng: parseFloat(agentLocation.lng) };
     }
     if (pendingLocations && pendingLocations.length > 0) {
       const loc = pendingLocations[0];
@@ -76,7 +75,7 @@ const MapMock = (props) => {
 
   const origin = useMemo(() => {
     if (agentLocation) {
-        return { lat: parseFloat(agentLocation.lat), lng: parseFloat(agentLocation.lng) };
+      return { lat: parseFloat(agentLocation.lat), lng: parseFloat(agentLocation.lng) };
     }
     return pendingLocations[0];
   }, [agentLocation, pendingLocations]);
@@ -85,7 +84,7 @@ const MapMock = (props) => {
 
   const waypoints = useMemo(() => {
     if (!pendingLocations || pendingLocations.length <= (agentLocation ? 1 : 2)) return [];
-    
+
     // If we have an agent location, the first pending stop is a waypoint.
     // If we don't, the first pending stop is the origin.
     const startIdx = agentLocation ? 0 : 1;
