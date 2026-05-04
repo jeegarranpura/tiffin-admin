@@ -1,4 +1,4 @@
-export const BASE_URL = "http://192.168.1.72:8080";
+export const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const AUTH_REGISTER = `${BASE_URL}/api/auth/register`;
 export const AUTH_LOGIN = `${BASE_URL}/api/auth/login`;
