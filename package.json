@@ -37,7 +37,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.2.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "babel-jest": "^30.3.0",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -46,6 +46,6 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
-    "vite": "7.2.4"
+    "vite": "^6.0.0"
   }
 }
