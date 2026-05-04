@@ -72,7 +72,7 @@ const LiveTrackingPage = () => {
             // }, 2000)
 
             return () => {
-                clearInterval(socketInterval);
+                // clearInterval(socketInterval);
                 disconnectSocket();
             };
         }

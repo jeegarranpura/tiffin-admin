@@ -1,7 +1,9 @@
 import React from 'react';
 
-const StopCard = ({ customer, index, isReorderable = false, onRemove, onDragStart }) => {
-  const { name, address, type, eta } = customer;
+const StopCard = ({ customer, order, index, isReorderable = false, onRemove, onDragStart, onViewProof }) => {
+  const displayCustomer = customer || order?.Customer || {};
+  const delivery = order?.Delivery || {};
+  const { name, address, type, eta } = displayCustomer;
 
   const handleDragStart = (e) => {
     if (onDragStart) {
@@ -9,6 +11,8 @@ const StopCard = ({ customer, index, isReorderable = false, onRemove, onDragStar
     }
     e.dataTransfer.setData("draggedIndex", index);
   };
+
+  const hasProof = order?.status === 'delivered' && (delivery.homePhoto || delivery.tiffinPhoto);
 
   return (
     <div
@@ -26,9 +30,9 @@ const StopCard = ({ customer, index, isReorderable = false, onRemove, onDragStar
         }`}>
         {index + 1}
       </div>
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 text-left">
         <div className="flex items-center gap-2">
-          <p className="text-sm font-bold truncate">{name}</p>
+          <p className={`text-sm font-bold truncate ${hasProof ? 'line-through text-slate-400' : ''}`}>{name}</p>
           {type && (
             <span className="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[10px] font-bold">
               {type}
@@ -37,6 +41,16 @@ const StopCard = ({ customer, index, isReorderable = false, onRemove, onDragStar
         </div>
         <p className="text-xs text-slate-500 truncate">{address}</p>
       </div>
+
+      {hasProof && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onViewProof(order); }}
+          className="size-8 rounded-lg bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-600 hover:text-white transition-all shadow-sm border border-green-100 cursor-pointer"
+          title="View Proof of Delivery"
+        >
+          <span className="material-symbols-outlined text-lg">image</span>
+        </button>
+      )}
 
       {eta && (
         <div className="text-right hidden sm:block">
@@ -53,7 +67,7 @@ const StopCard = ({ customer, index, isReorderable = false, onRemove, onDragStar
           <span className="material-symbols-outlined text-lg">close</span>
         </button>
       ) : (
-        <span className="material-symbols-outlined text-slate-300"></span>
+        !hasProof && <span className="material-symbols-outlined text-slate-300"></span>
       )}
     </div>
   );

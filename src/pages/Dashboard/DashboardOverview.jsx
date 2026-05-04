@@ -4,11 +4,11 @@ import Button from '../../components/Common/Button';
 import Badge from '../../components/Common/Badge';
 import Table from '../../components/Common/Table';
 
-import { 
-  exportToExcel, 
-  getDailyDeliveryReport, 
-  getActiveCustomersReport, 
-  getNonRenewedReport, 
+import {
+  exportToExcel,
+  getDailyDeliveryReport,
+  getActiveCustomersReport,
+  getNonRenewedReport,
   getUpcomingPaymentsReport,
   sendPaymentReminders
 } from '../../utils/report-utils';
@@ -20,7 +20,7 @@ const DashboardOverview = (props) => {
 
   const flattenData = (data, type) => {
     if (!data || data.length === 0) return [];
-    
+
     switch (type) {
       case 'daily':
         return data.map(item => ({
@@ -84,7 +84,7 @@ const DashboardOverview = (props) => {
         default:
           return;
       }
-      
+
       const flatData = flattenData(rawData, reportType);
       exportToExcel(flatData, fileName);
     } catch (error) {
@@ -117,7 +117,7 @@ const DashboardOverview = (props) => {
         default:
           return;
       }
-      
+
       const flatData = flattenData(rawData, reportType);
       const headers = flatData.length > 0 ? Object.keys(flatData[0]).map(k => ({ label: k, key: k })) : [];
       setReportPreview({ type: title, data: flatData, headers });
@@ -439,7 +439,7 @@ const DashboardOverview = (props) => {
                       <div key={route.id} className="p-4 hover:bg-slate-50 transition-colors group">
                         <div className="flex items-center justify-between gap-3">
                           <div className="size-10 bg-primary/10 rounded-full flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-all">
-                            <span className="material-symbols-outlined">delivery</span>
+                            <span className="material-symbols-outlined">delivery_dining</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
@@ -452,8 +452,7 @@ const DashboardOverview = (props) => {
                           </div>
                           <Button
                             size="sm"
-                            variant="ghost"
-                            className="text-[10px] py-1 border-slate-200 hover:border-primary shrink-0"
+                            className="text-[10px]"
                             onClick={() => navigate(`/live-tracking/${route.id}`)}
                           >
                             Track
@@ -463,7 +462,7 @@ const DashboardOverview = (props) => {
                         <div className="mt-3 flex items-center justify-between text-[10px]">
                           <div className="flex items-center gap-3">
                             <span className="flex items-center gap-1 text-slate-400">
-                              <span className="material-symbols-outlined text-[12px]">orders</span>
+                              <span className="material-symbols-outlined text-[12px]">route</span>
                               {route.Orders?.length || 0} stops
                             </span>
                             <span className="flex items-center gap-1 text-slate-400">

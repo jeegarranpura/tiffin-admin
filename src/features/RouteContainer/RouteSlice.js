@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchCreateRoute, fetchDeleteRoute, fetchRouteList, fetchUpdateRoute, fetchDeliveryAgentList } from '../../utils/route-utils';
 
 
-export const fetchRouteListReq = createAsyncThunk('route/fetchRouteList', async () => {
+export const fetchRouteListReq = createAsyncThunk('route/fetchRouteList', async ({ dateQuery, mealTime }) => {
     try {
-        const response = await fetchRouteList();
+        const response = await fetchRouteList(dateQuery, mealTime);
         return response;
     } catch (error) {
         throw error

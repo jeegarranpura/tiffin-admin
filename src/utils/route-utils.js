@@ -29,9 +29,9 @@ export const fetchCreateRoute = async (payload) => {
     }
 }
 
-export const fetchRouteList = async () => {
+export const fetchRouteList = async (dateQuery, mealTime) => {
     try {
-        const response = await api.get(GET_ALL_ROUTES);
+        const response = await api.get(GET_ALL_ROUTES, { params: { date: dateQuery, mealTime: mealTime } });
         return response.data;
     } catch (error) {
         console.error('Error fetching all routes:', error);

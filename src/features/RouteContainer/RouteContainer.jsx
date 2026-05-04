@@ -31,7 +31,9 @@ const RouteContainer = ({
 }) => {
 
     useEffect(() => {
-        fetchRouteListReq();
+        const dateQuery = props?.dateQuery || new Date().toISOString().split('T')[0];
+        const mealTime = props?.mealTime || "Lunch";
+        fetchRouteListReq({ dateQuery, mealTime });
         fetchDeliveryAgentListReq();
         fetchCustomerList();
     }, [fetchRouteListReq, fetchDeliveryAgentListReq, fetchCustomerList]);

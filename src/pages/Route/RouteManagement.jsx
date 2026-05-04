@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import RouteListView from './components/RouteListView';
 import RouteUpdateView from './components/RouteUpdateView';
 
-function RouteManagement({ routeList, deliveryAgentList, fetchCreateRouteReq, fetchUpdateRouteReq, customerList }) {
+function RouteManagement({ routeList, deliveryAgentList, fetchCreateRouteReq, fetchUpdateRouteReq, customerList, fetchRouteListReq }) {
     const [view, setView] = useState('list'); // 'list' or 'edit'
     const [editingRoute, setEditingRoute] = useState(null);
 
@@ -38,6 +38,7 @@ function RouteManagement({ routeList, deliveryAgentList, fetchCreateRouteReq, fe
                     onEditInfo={handleEditRoute}
                     customerList={customerList}
                     deliveryAgents={deliveryAgentList}
+                    fetchRouteListReq={fetchRouteListReq}
                 />
             ) : (
                 <RouteUpdateView
@@ -46,6 +47,7 @@ function RouteManagement({ routeList, deliveryAgentList, fetchCreateRouteReq, fe
                     onSave={handleSave}
                     onDiscard={handleDiscard}
                     customerList={customerList}
+                    fetchRouteListReq={fetchRouteListReq}
                 />
             )}
         </div>

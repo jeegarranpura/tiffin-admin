@@ -16,7 +16,7 @@ const containerStyle = {
 //   lat: 22.3039,
 //   lng: 70.8022,
 // };
-const key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+const key = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 const MapMock = (props) => {
   const { className = '', isMini = false, locations = [], callback, agentLocation } = props;
