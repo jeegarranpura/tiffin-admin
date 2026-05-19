@@ -7,19 +7,21 @@ import { initiateSocketConnection, disconnectSocket, subscribeToGlobalTracking }
 const DashboardOverview = React.lazy(() => import('../../pages/Dashboard/DashboardOverview'));
 
 const DashboardContainer = (props) => {
-    const { 
-        fetchDashboardOverview, 
-        fetchRouteListReq, 
+    const {
+        fetchDashboardOverview,
+        fetchRouteListReq,
         updateLiveLocation,
-        dashboardData, 
+        dashboardData,
         routeList,
         liveLocations,
-        token 
+        token
     } = props;
 
     useEffect(() => {
+        const dateQuery = props?.dateQuery || new Date().toISOString().split('T')[0];
+        const mealTime = props?.mealTime || "Lunch";
         fetchDashboardOverview();
-        fetchRouteListReq();
+        fetchRouteListReq({ dateQuery, mealTime });
     }, [fetchDashboardOverview, fetchRouteListReq]);
 
     useEffect(() => {
@@ -39,7 +41,7 @@ const DashboardContainer = (props) => {
 
     return (
         <Suspense fallback={<div>Loading Dashboard...</div>}>
-            <DashboardOverview 
+            <DashboardOverview
                 {...props}
                 {...dashboardData}
                 routeList={routeList}
