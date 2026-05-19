@@ -156,13 +156,9 @@ const MapMock = (props) => {
                 position={{ lat: Number(loc.lat), lng: Number(loc.lng) }}
                 title={loc.name}
                 icon={loc.id === 'agent-location' ? ({
-                  path: 'M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-5.3l1.1-2c.3-.6 1-1 1.7-1h3.4l2.1-3.6-1.7-1-2.1 3.6H13c-1.3 0-2.4.7-3 1.8L8.2 15.6H5v2h4.5l1.3-2.1zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z',
-                  fillColor: "#2563eb",
-                  fillOpacity: 1,
-                  strokeWeight: 2,
-                  strokeColor: "#272727ff",
-                  scale: 1.5,
-                  anchor: new window.google.maps.Point(12, 12),
+                  url: '/delivery-agent.svg',
+                  scaledSize: new window.google.maps.Size(40, 40),
+                  anchor: new window.google.maps.Point(20, 20),
                 }) : ({
                   path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
                   scale: 10,
@@ -188,13 +184,9 @@ const MapMock = (props) => {
               title={`Agent: ${props.agentLocation.agentName}`}
               zIndex={100}
               icon={{
-                path: 'M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-5.3l1.1-2c.3-.6 1-1 1.7-1h3.4l2.1-3.6-1.7-1-2.1 3.6H13c-1.3 0-2.4.7-3 1.8L8.2 15.6H5v2h4.5l1.3-2.1zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z',
-                fillColor: "#2563eb",
-                fillOpacity: 1,
-                strokeWeight: 2,
-                strokeColor: "#ffffff",
-                scale: 1.5,
-                anchor: new window.google.maps.Point(12, 12),
+                url: '/delivery-agent-1.svg',
+                scaledSize: new window.google.maps.Size(40, 40),
+                anchor: new window.google.maps.Point(20, 20),
               }}
             />
           )}
