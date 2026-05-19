@@ -60,9 +60,6 @@ const MapMock = (props) => {
   }, [locations]);
 
   const center = useMemo(() => {
-    if (agentLocation) {
-      return { lat: parseFloat(agentLocation.lat), lng: parseFloat(agentLocation.lng) };
-    }
     if (pendingLocations && pendingLocations.length > 0) {
       const loc = pendingLocations[0];
       return {
@@ -70,8 +67,11 @@ const MapMock = (props) => {
         lng: parseFloat(loc.lng || loc.longitude || 70.8022)
       };
     }
+    if (agentLocation) {
+      return { lat: parseFloat(agentLocation.lat), lng: parseFloat(agentLocation.lng) };
+    }
     return defaultCenter;
-  }, [agentLocation, pendingLocations, defaultCenter]);
+  }, [pendingLocations, agentLocation, defaultCenter]);
 
   const origin = useMemo(() => {
     if (agentLocation) {
@@ -155,7 +155,15 @@ const MapMock = (props) => {
                 key={`${loc.id}-${index}`}
                 position={{ lat: Number(loc.lat), lng: Number(loc.lng) }}
                 title={loc.name}
-                icon={{
+                icon={loc.id === 'agent-location' ? ({
+                  path: 'M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-5.3l1.1-2c.3-.6 1-1 1.7-1h3.4l2.1-3.6-1.7-1-2.1 3.6H13c-1.3 0-2.4.7-3 1.8L8.2 15.6H5v2h4.5l1.3-2.1zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z',
+                  fillColor: "#2563eb",
+                  fillOpacity: 1,
+                  strokeWeight: 2,
+                  strokeColor: "#272727ff",
+                  scale: 1.5,
+                  anchor: new window.google.maps.Point(12, 12),
+                }) : ({
                   path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
                   scale: 10,
                   fillColor: isDelivered ? "#10b981" : "#ef4444", // Green for delivered, red for pending
@@ -163,7 +171,7 @@ const MapMock = (props) => {
                   strokeColor: "#FFFFFF",
                   strokeOpacity: 1,
                   strokeWeight: 2
-                }}
+                })}
                 label={{
                   text: isDelivered ? '✓' : `${index + 1}`,
                   color: "white",
@@ -190,7 +198,7 @@ const MapMock = (props) => {
               }}
             />
           )}
-          {directions === null && locations.length > 1 && origin && destination && (
+          {directions === null && (locations.length > 1 || (agentLocation && locations.length > 0)) && origin && destination && (
             <DirectionsService
               options={{
                 origin: {

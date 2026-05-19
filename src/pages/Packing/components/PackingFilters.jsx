@@ -17,6 +17,7 @@ const PackingFilters = (props) => {
     const res = await updateRouteStatusReq({ id: routeId, status: 'ready' })
     if (res?.payload) {
       selectedRoute.status = 'ready'
+
     }
   }
   return (
@@ -33,7 +34,7 @@ const PackingFilters = (props) => {
                 }`}
             >
               {route.name} ({route?.Orders?.length})
-              {route?.status === 'ready' && <span className="text-green-500 material-symbols-outlined"> check_circle </span>}
+              {(route?.status || selectedRoute.status) === 'ready' && <span className="text-green-500 material-symbols-outlined"> check_circle </span>}
             </button>
           ))}
         </div>
@@ -59,7 +60,7 @@ const PackingFilters = (props) => {
             onClick={() => handleOnClickRouteComplete(selectedRoute?.id)}
             disabled={selectedRoute?.Orders?.filter((order) => order?.status === 'pending').length > 0 || selectedRoute?.status === 'ready'}
           >
-            {selectedRoute?.status === 'ready' ? 'Complated' : 'Complate'}
+            {selectedRoute?.status === 'ready' ? 'Completed' : 'Complete'}
           </Button>
         </div>
       </div>

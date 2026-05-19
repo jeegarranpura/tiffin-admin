@@ -3,6 +3,7 @@ import StopCard from './StopCard';
 import MapMock from './MapMock';
 import Button from '../../../components/Common/Button';
 import Badge from '../../../components/Common/Badge';
+import Collapse from '../../../components/Common/Collapse';
 
 const RouteUpdateView = ({ initialRoute = null, onSave, onDiscard, deliveryAgents = [], customerList }) => {
   const [routeName, setRouteName] = useState(initialRoute?.name || '');
@@ -10,6 +11,7 @@ const RouteUpdateView = ({ initialRoute = null, onSave, onDiscard, deliveryAgent
   const [notes, setNotes] = useState('');
   const [searchCustomer, setSearchCustomer] = useState('');
   const orders = initialRoute?.Orders || [];
+  const customers = initialRoute?.Customers || [];
   const [routeInfo, setRouteInfo] = useState(null);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [draggedOverIndex, setDraggedOverIndex] = useState(null);
@@ -225,10 +227,24 @@ const RouteUpdateView = ({ initialRoute = null, onSave, onDiscard, deliveryAgent
         {/* Right Column (60%) */}
         {/* <div className="w-[60%] min-h-0"> */}
         <aside className="w-96 border-l border-slate-200 flex flex-col shrink-0">
-
-          <section className="bg-white rounded-xl shadow-sm border border-slate-200 h-full flex flex-col overflow-hidden relative">
+          <Collapse
+            className="bg-white  rounded-xl shadow-sm border border-slate-200 flex flex-col relative h-auto mb-2"
+            header={<div className="flex items-center !p-0 justify-between">
+              <div>
+                <h4 className="text-lg font-bold">Route Sequence ({orders?.length} Stops)</h4>
+                <p className="text-xs text-slate-400">
+                  Total distance: <span className="font-bold text-slate-600">{routeInfo?.totalDistance?.toFixed(2)} KM</span> •
+                  Estimated time: <span className="font-bold text-slate-600"> {routeInfo?.estimatedTime?.toFixed(2)} MINS</span>
+                </p>
+              </div>
+              {/* <Button size="sm" variant="outline" className="text-primary border-primary/20 hover:bg-primary hover:text-white" icon="auto_fix_high">
+              Optimize Route
+            </Button> */}
+            </div>}
+          >
+            {/* <section className="bg-white rounded-xl shadow-sm border border-slate-200 h-full flex flex-col overflow-hidden relative"> */}
             {/* Card Header */}
-            <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-white z-10">
+            {/* <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-white z-10">
               <div>
                 <h4 className="text-lg font-bold">Route Sequence ({orders?.length} Stops)</h4>
                 <p className="text-xs text-slate-400">
@@ -239,14 +255,14 @@ const RouteUpdateView = ({ initialRoute = null, onSave, onDiscard, deliveryAgent
               {/* <Button size="sm" variant="outline" className="text-primary border-primary/20 hover:bg-primary hover:text-white" icon="auto_fix_high">
                 Optimize Route
               </Button> */}
-            </div>
+            {/* </div> */}
 
             {/* Mini-Map Preview */}
             {/* <MapMock className="h-48 border-b border-slate-200" locations={location} isMini={true} /> */}
 
             {/* Sequence List */}
             <div
-              className="flex-1 overflow-y-auto p-6 space-y-3 custom-scrollbar bg-slate-50/50"
+              className="flex-1 overflow-y-auto  space-y-3 custom-scrollbar bg-slate-50/50"
               onDragOver={(e) => {
                 // Allow dropping at the end of the list
                 if (e.target === e.currentTarget) {
@@ -278,7 +294,7 @@ const RouteUpdateView = ({ initialRoute = null, onSave, onDiscard, deliveryAgent
                     customer={stop?.Customer}
                     index={index}
                     isReorderable={true}
-                    onRemove={() => removeCustomerinRoute(stop.customerId)}
+                  // onRemove={() => removeCustomerinRoute(stop.customerId)}
                   />
                   {draggedOverIndex === index + 1 && index === stopsList.length - 1 && draggedIndex !== index && (
                     <div className="absolute -bottom-1.5 left-0 right-0 h-1 bg-primary rounded-full z-10 animate-pulse shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)]" />
@@ -292,7 +308,54 @@ const RouteUpdateView = ({ initialRoute = null, onSave, onDiscard, deliveryAgent
                 </div>
               )}
             </div>
-          </section>
+            {/* </section> */}
+          </Collapse>
+
+          <Collapse
+            className="bg-white  rounded-xl border border-slate-200 flex flex-col relative h-auto mb-2"
+            initialCollapsed={false}
+
+            header={<div className="p-0 flex items-center justify-between">
+              <h4 className="text-lg font-bold">Customer Details</h4>
+
+              {/* <Button size="sm" variant="outline" className="text-primary border-primary/20 hover:bg-primary hover:text-white" icon="auto_fix_high">
+              Optimize Route
+            </Button> */}
+            </div>}
+          >
+
+            {/* Sequence List */}
+            <div
+              className="flex-1 overflow-y-auto  space-y-3 custom-scrollbar bg-slate-50/50"
+              onDragOver={(e) => {
+                // Allow dropping at the end of the list
+                if (e.target === e.currentTarget) {
+                  handleDragOver(e, stopsList.length);
+                }
+              }}
+              onDrop={(e) => {
+                if (e.target === e.currentTarget) {
+                  handleDrop(e, stopsList.length);
+                }
+              }}
+            >
+              {customers.map((stop, index) => (
+                <div
+                  key={stop.id}
+                  className={`relative transition-all duration-300 ${draggedIndex === index ? 'opacity-40 scale-95 select-none' : 'opacity-100'
+                    }`}
+                >
+                  <StopCard
+                    customer={stop}
+                    index={index}
+                    isReorderable={true}
+                    onRemove={() => removeCustomerinRoute(stop.id)}
+                  />
+                </div>
+              ))}
+            </div>
+          </Collapse>
+
         </aside>
         {/* </div> */}
       </div>

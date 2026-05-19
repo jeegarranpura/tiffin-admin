@@ -4,8 +4,10 @@ import { AUTH_LOGIN, AUTH_REGISTER } from '../config/server-config'
 export const loginUtils = async (req) => {
     try {
         const response = await api.post(AUTH_LOGIN, { ...req, platform: 'web' })
+        console.log(':: response', response.data)
         return response.data;
     } catch (error) {
+        console.log(':: error', error.response.data)
         throw error
     }
 }

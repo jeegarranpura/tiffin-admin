@@ -1,7 +1,8 @@
 import axios from "axios";
 // import { PATH_LOGIN } from "./RouteConstanst";
 // import { logout } from "./commonUtils";
-// import { notify } from "./notification";
+import { notification } from "./notification";
+
 
 /**
  * Determines and returns the base URL for API requests based on the current environment.
@@ -54,12 +55,12 @@ api.interceptors.response.use(
 
         if (!response) {
             // Network or CORS error
-            // notify.error("Network error or server not responding");
+            notification.error("Network error or server not responding");
             return Promise.reject(error);
         }
 
         if (response.status === 401) {
-            // notify.error(response.data?.message || "Unauthorized");
+            notification.error(response.data?.message || "Unauthorized");
             // logout();
             // window.location.pathname = PATH_LOGIN;
             localStorage.removeItem("token");
@@ -67,9 +68,13 @@ api.interceptors.response.use(
             window.location.pathname = "/login";
             return Promise.reject(error);
         }
+        if (response.status === 500) {
+            notification.error(response.data?.message || "Internal Server Error");
+            return Promise.reject(error);
+        }
 
         // Handle other errors globally
-        // notify.error(response.data?.message || "Something went wrong");
+        notification.error(response.data?.message || "Something went wrong");
         return Promise.reject(error);
     }
 );

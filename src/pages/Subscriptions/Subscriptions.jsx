@@ -179,7 +179,7 @@ const Subscriptions = (props) => {
         { key: 'amount', label: 'Amount', render: (val, row) => `${row.Payments[0]?.amount || 0}` },
         {
             key: 'id', label: 'Actions', align: 'right', render: (val, row) => (
-                row.status === 'active' ? (
+                row.status !== 'expired' ? (
                     <div className="flex justify-end gap-1">
                         <Button variant="ghost" size="sm" icon="event_busy" className="text-orange-500 hover:bg-orange-50" onClick={() => handleSkipClick(row)} title="Skip Delivery" />
                         <Button variant="ghost" size="sm" icon="edit" onClick={() => handleEditClick(row, filteredList.find(c => c.Subscriptions.includes(row)), row.Payments)} />
@@ -262,19 +262,37 @@ const Subscriptions = (props) => {
                                         </div>
                                     </div>
                                     <div className="flex gap-4 items-center">
-                                        <div className="flex items-center gap-2">
-                                            <Badge variant="danger" className="!text-xs font-medium">
-                                                Expired
-                                            </Badge>
-                                            <p className="font-bold text-slate-900 !text-xs">{customer.Subscriptions?.filter(s => s.status === 'expired')?.length || 0}</p>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Badge variant="success" className="!text-xs font-medium">
-                                                Active
-                                            </Badge>
-                                            <p className="font-bold text-slate-900 !text-xs">{customer.Subscriptions?.filter(s => s.status === 'active')?.length || 0}</p>
+                                        {
+                                            customer.Subscriptions?.filter(s => s.status === 'pending_payment')?.length > 0 && (
 
-                                        </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Badge variant="warning" className="!text-xs font-medium">
+                                                        Pending Payment
+                                                    </Badge>
+                                                    <p className="font-bold text-slate-900 !text-xs">{customer.Subscriptions?.filter(s => s.status === 'pending_payment')?.length || 0}</p>
+                                                </div>
+                                            )
+                                        }
+                                        {customer.Subscriptions?.filter(s => s.status === 'expired')?.length > 0 && (
+
+                                            <div className="flex items-center gap-2">
+                                                <Badge variant="danger" className="!text-xs font-medium">
+                                                    Expired
+                                                </Badge>
+                                                <p className="font-bold text-slate-900 !text-xs">{customer.Subscriptions?.filter(s => s.status === 'expired')?.length || 0}</p>
+                                            </div>
+                                        )}
+                                        {
+                                            customer.Subscriptions?.filter(s => s.status === 'active')?.length > 0 && (
+                                                <div className="flex items-center gap-2">
+                                                    <Badge variant="success" className="!text-xs font-medium">
+                                                        Active
+                                                    </Badge>
+                                                    <p className="font-bold text-slate-900 !text-xs">{customer.Subscriptions?.filter(s => s.status === 'active')?.length || 0}</p>
+
+                                                </div>
+                                            )
+                                        }
                                     </div>
                                 </div>
                             }

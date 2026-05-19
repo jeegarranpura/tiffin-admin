@@ -76,7 +76,7 @@ const LiveTrackingPage = () => {
                 disconnectSocket();
             };
         }
-    }, [token, routeId, dispatch]);
+    }, [token, routeId]);
 
     const stops =
         useMemo(() => {
