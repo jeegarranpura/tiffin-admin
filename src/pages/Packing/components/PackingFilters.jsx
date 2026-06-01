@@ -4,21 +4,11 @@ import React from 'react';
 const Button = React.lazy(() => import('../../../components/Common/Button'));
 
 const PackingFilters = (props) => {
-  const { packingList, selectedRoute, handleSelectRoute, updateRouteStatusReq } = props;
-
-  const routes = [
-    { name: 'Downtown Route', count: 42, active: true },
-    { name: 'Suburban East', count: 38 },
-    { name: 'North Campus', count: 55 },
-    { name: 'Industrial Park', count: 65 },
-  ];
+  const { packingList, selectedRoute, handleSelectRoute, updateRouteStatusReq, fetchPackingListReq } = props;
 
   const handleOnClickRouteComplete = async (routeId) => {
-    const res = await updateRouteStatusReq({ id: routeId, status: 'ready' })
-    if (res?.payload) {
-      selectedRoute.status = 'ready'
-
-    }
+    await updateRouteStatusReq({ id: routeId, status: 'ready' })
+    await fetchPackingListReq()
   }
   return (
     <div className="flex flex-col gap-4">
@@ -58,7 +48,7 @@ const PackingFilters = (props) => {
           <Button
             icon="done_all"
             onClick={() => handleOnClickRouteComplete(selectedRoute?.id)}
-            disabled={selectedRoute?.Orders?.filter((order) => order?.status === 'pending').length > 0 || selectedRoute?.status === 'ready'}
+            disabled={selectedRoute?.Orders?.filter((order) => order?.status === 'pending').length > 0 || packingList.find((pkg) =>  pkg.id === selectedRoute?.id)?.status === 'ready'}
           >
             {selectedRoute?.status === 'ready' ? 'Completed' : 'Complete'}
           </Button>

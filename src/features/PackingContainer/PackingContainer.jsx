@@ -6,7 +6,7 @@ import {
     updateRouteStatusReq
 } from './PackingSlice'
 
-const PackingPage = React.lazy(() => import('../../pages/Packing/PackingPage'))
+import PackingPage  from '../../pages/Packing/PackingPage';
 
 const PackingContainer = ({
     fetchPackingListReq,
@@ -32,6 +32,7 @@ const PackingContainer = ({
                 isLoading={isLoading}
                 error={error}
                 message={message}
+                fetchPackingListReq={fetchPackingListReq}
                 {...props}
             />
         </>

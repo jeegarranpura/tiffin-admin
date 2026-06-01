@@ -3,30 +3,18 @@ import { fetchRouteList } from '../../utils/route-utils';
 import { updateOrderStatus, updateRouteStatus } from '../../utils/order-utils';
 
 export const fetchPackingListReq = createAsyncThunk('packing/fetchPackingList', async () => {
-    try {
         const response = await fetchRouteList();
-        return response;
-    } catch (error) {
-        throw error
-    }
+    return response;
 });
 
 export const updateOrderStatusReq = createAsyncThunk('packing/updateOrderStatus', async (payload) => {
-    try {
-        const response = await updateOrderStatus(payload);
-        return response;
-    } catch (error) {
-        throw error
-    }
+    const response = await updateOrderStatus(payload);
+    return response;
 });
 
 export const updateRouteStatusReq = createAsyncThunk('packing/updateRouteStatus', async (payload) => {
-    try {
-        const response = await updateRouteStatus(payload);
-        return response;
-    } catch (error) {
-        throw error
-    }
+    const response = await updateRouteStatus(payload);
+    return response;
 });
 
 const PackingSlice = createSlice({
@@ -86,5 +74,5 @@ const PackingSlice = createSlice({
         });
     },
 });
-export const { } = PackingSlice.actions;
+// export const { } = PackingSlice.actions;
 export default PackingSlice.reducer;
