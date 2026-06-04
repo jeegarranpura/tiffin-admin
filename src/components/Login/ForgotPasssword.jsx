@@ -30,6 +30,8 @@ const ForgotPasssword = ({ forgotPasswordReq, setScreenState, setEmail }) => {
       // dispatch(login({ username: formData.username, name: 'Alex Rivera' }));
       dispatch(setScreenState("resetPassword"));
       setEmail(formData.email);
+    } else {
+      setLoading(false);
     }
   };
 
@@ -104,8 +106,10 @@ const ForgotPasssword = ({ forgotPasswordReq, setScreenState, setEmail }) => {
                   disabled={loading}
                 >
                   Generate OTP
-                  <span className={`material-symbols-outlined text-[20px] ${loading ? 'animate-spin': ''}`}>
-                    {loading ? 'progress_activity' : 'arrow_forward'}
+                  <span
+                    className={`material-symbols-outlined text-[20px] ${loading ? "animate-spin" : ""}`}
+                  >
+                    {loading ? "progress_activity" : "arrow_forward"}
                   </span>
                 </button>
               </form>

@@ -27,7 +27,7 @@ const ResetPassword = ({ resetPasswordReq, setScreenState, email }) => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
     console.log("Login attempt:", formData);
     if (!Object.values(formData)) {
@@ -42,11 +42,13 @@ const ResetPassword = ({ resetPasswordReq, setScreenState, email }) => {
     const res = await resetPasswordReq(formData);
     console.log("res", res);
     if (res.payload?.message) {
-      setLoading(false)
+      setLoading(false);
       // Dispatch login action
       // dispatch(login({ username: formData.username, name: 'Alex Rivera' }));
       navigate("/login");
       dispatch(setScreenState());
+    } else {
+      setLoading(false);
     }
   };
 
