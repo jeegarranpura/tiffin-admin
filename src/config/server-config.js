@@ -2,6 +2,8 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const AUTH_REGISTER = `${BASE_URL}/api/auth/register`;
 export const AUTH_LOGIN = `${BASE_URL}/api/auth/login`;
+export const AUTH_FORGOT_PASSWORD = `${BASE_URL}/api/auth/forgot-password`;
+export const AUTH_RESET_PASSWORD = `${BASE_URL}/api/auth/reset-password`;
 
 // Plans
 export const CREATE_PLAN = `${BASE_URL}/api/plans`;

@@ -3,15 +3,19 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { notification } from "../../utils/notification";
 
-const Login = ({ loginUser, setScreenState }) => {
+const ResetPassword = ({ resetPasswordReq, setScreenState, email }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    email: email,
+    otp: "",
+    newPassword: "",
+    confirm_password: "",
   });
 
   const handleChange = (e) => {
@@ -23,18 +27,26 @@ const Login = ({ loginUser, setScreenState }) => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
+    setLoading(true)
     e.preventDefault();
     console.log("Login attempt:", formData);
-    const res = await loginUser(formData);
+    if (!Object.values(formData)) {
+      notification.error("All fields are required");
+      return;
+    }
+    if (formData.newPassword !== formData.confirm_password) {
+      notification.error("Passwords do not match");
+      return;
+    }
+    //
+    const res = await resetPasswordReq(formData);
     console.log("res", res);
-    if (res.payload) {
-      setLoading(false);
+    if (res.payload?.message) {
+      setLoading(false)
       // Dispatch login action
       // dispatch(login({ username: formData.username, name: 'Alex Rivera' }));
-      navigate("/dashboard");
-    } else {
-      setLoading(false);
+      navigate("/login");
+      dispatch(setScreenState());
     }
   };
 
@@ -63,17 +75,17 @@ const Login = ({ loginUser, setScreenState }) => {
             {/* Login Card */}
             <div className="bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-slate-200 p-8">
               <div className="mb-8">
-                <h2 className="text-slate-900 text-xl font-bold">Sign in</h2>
-                <p className="text-slate-500 text-sm mt-1">
-                  Enter your credentials to access your dashboard
-                </p>
+                <h2 className="text-slate-900 text-xl font-bold">
+                  Forgot Password
+                </h2>
+                {/* <p className="text-slate-500 text-sm mt-1">Enter your credentials to access your dashboard</p> */}
               </div>
 
               <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                 {/* Email Field */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-slate-700 text-sm font-semibold text-left">
-                    Username
+                    Email
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -82,22 +94,43 @@ const Login = ({ loginUser, setScreenState }) => {
                       </span>
                     </div>
                     <input
-                      name="username"
-                      value={formData.username}
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none cursor-not-allowed"
+                      placeholder="john_wick"
+                      type="text"
+                      disabled
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-slate-700 text-sm font-semibold text-left">
+                    Otp
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                      <span className="material-symbols-outlined text-[20px]">
+                        forward_to_inbox
+                      </span>
+                    </div>
+                    <input
+                      name="otp"
+                      value={formData.otp}
                       onChange={handleChange}
                       className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none"
-                      placeholder="john_wick"
+                      placeholder="otp"
                       type="text"
                       required
                     />
                   </div>
                 </div>
 
-                {/* Password Field */}
                 <div className="flex flex-col gap-1.5">
                   <div className="flex justify-between items-center">
                     <label className="text-slate-700 text-sm font-semibold">
-                      Password
+                      New Password
                     </label>
                     {/* <a className="text-primary text-xs font-semibold hover:underline decoration-primary/30 underline-offset-4" href="#">
                       Forgot password?
@@ -110,8 +143,8 @@ const Login = ({ loginUser, setScreenState }) => {
                       </span>
                     </div>
                     <input
-                      name="password"
-                      value={formData.password}
+                      name="newPassword"
+                      value={formData.newPassword}
                       onChange={handleChange}
                       className="w-full pl-11 pr-11 py-3 bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none"
                       placeholder="••••••••"
@@ -129,31 +162,53 @@ const Login = ({ loginUser, setScreenState }) => {
                     </button>
                   </div>
                 </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-slate-700 text-sm font-semibold">
+                      Confirm Password
+                    </label>
+                    {/* <a className="text-primary text-xs font-semibold hover:underline decoration-primary/30 underline-offset-4" href="#">
+                      Forgot password?
+                    </a> */}
+                  </div>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                      <span className="material-symbols-outlined text-[20px]">
+                        lock
+                      </span>
+                    </div>
+                    <input
+                      name="confirm_password"
+                      value={formData.confirm_password}
+                      onChange={handleChange}
+                      className="w-full pl-11 pr-11 py-3 bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none"
+                      placeholder="••••••••"
+                      type={showConfirmPassword ? "text" : "password"}
+                      required
+                    />
+                    <button
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                      type="button"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">
+                        {showConfirmPassword ? "visibility_off" : "visibility"}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
                 <div>
                   <span
                     className="text-slate-700 text-xs underline cursor-pointer"
                     onClick={() => dispatch(setScreenState("forgotPassword"))}
                   >
-                    Forgot Password?
+                    Back
                   </span>
                 </div>
-
-                {/* Remember Me */}
-                {/* <div className="flex items-center gap-2 mt-1">
-                  <input
-                    id="remember"
-                    name="remember"
-                    checked={formData.remember}
-                    onChange={handleChange}
-                    className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20"
-                    type="checkbox"
-                  />
-                  <label className="text-slate-600 text-sm" htmlFor="remember">
-                    Keep me signed in
-                  </label>
-                </div> */}
-
-                {/* Submit Button */}
                 <button
                   className={`
                     w-full py-3 bg-primary  text-white font-semibold rounded-lg shadow-md shadow-primary/20 transition-all duration-200 mt-2 flex items-center justify-center gap-2
@@ -162,7 +217,7 @@ const Login = ({ loginUser, setScreenState }) => {
                   type="submit"
                   disabled={loading}
                 >
-                  Sign In
+                  Update Password
                   <span
                     className={`material-symbols-outlined text-[20px] ${loading ? "animate-spin" : ""}`}
                   >
@@ -171,14 +226,7 @@ const Login = ({ loginUser, setScreenState }) => {
                 </button>
               </form>
 
-              <div className="mt-8 pt-6 border-t border-slate-100">
-                {/* <div className="flex items-center justify-center gap-2">
-                  <p className="text-slate-500 text-sm">Need help?</p>
-                  <a className="text-slate-900 text-sm font-semibold hover:text-primary transition-colors" href="#">
-                    Contact Support
-                  </a>
-                </div> */}
-              </div>
+              <div className="mt-8 pt-6 border-t border-slate-100"></div>
             </div>
 
             {/* Footer Info */}
@@ -189,14 +237,6 @@ const Login = ({ loginUser, setScreenState }) => {
                 <br />
                 Secure login with 256-bit SSL encryption.
               </p>
-              {/* <div className="flex gap-4">
-                <a className="text-slate-400 hover:text-slate-600 text-xs transition-colors" href="#">
-                  Privacy Policy
-                </a>
-                <a className="text-slate-400 hover:text-slate-600 text-xs transition-colors" href="#">
-                  Terms of Service
-                </a>
-              </div> */}
             </div>
           </div>
         </div>
@@ -211,4 +251,4 @@ const Login = ({ loginUser, setScreenState }) => {
   );
 };
 
-export default Login;
+export default ResetPassword;

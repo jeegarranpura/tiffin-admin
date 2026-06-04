@@ -42,6 +42,10 @@ api.interceptors.response.use(
     (response) => {
         // ✅ Only return data for successful responses (2xx)
         if (response.status >= 200 && response.status < 300) {
+            if (response?.data?.message) {
+                notification.success(response?.data?.message);
+                return response;
+            }
             return response;
         }
         // notify.error(response.data?.message || "Something went wrong");
