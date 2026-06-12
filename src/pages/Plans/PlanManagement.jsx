@@ -4,6 +4,7 @@ import Badge from '../../components/Common/Badge';
 import Modal from '../../components/Common/Modal';
 import Table from '../../components/Common/Table';
 import SlideOver from '../../components/Common/SlideOver';
+import { notification } from '../../utils/notification';
 
 const PlanManagement = (props) => {
   const { planList, fetchPlanList, fetchPlanById, fetchCreatePlan, fetchUpdatePlan, fetchDeletePlan, isLoading } = props;
@@ -160,6 +161,10 @@ const PlanManagement = (props) => {
   ];
 
   const onHandleSubmit = async () => {
+    if (Object.values(inputData)?.some((val) => !val)) {
+      notification.error('All fields are mandatory');
+      return;
+    }
     const createPayload = {
       name: inputData.name,
       description: inputData.description,
@@ -248,7 +253,7 @@ const PlanManagement = (props) => {
 
         <form className="p-8 space-y-6 text-left " onSubmit={(e) => e.preventDefault()}>
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700">Plan Name</label>
+            <label className="text-sm font-bold text-slate-700 required-label">Plan Name</label>
             <input
               className="w-full rounded-xl border-slate-200 bg-slate-50 text-base py-3 px-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
               type="text"
@@ -256,10 +261,11 @@ const PlanManagement = (props) => {
               placeholder='Enter Plan Name'
               name='name'
               onChange={onInputChanges}
+              required
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700">Short Description</label>
+            <label className="text-sm font-bold text-slate-700 required-label">Short Description</label>
             <textarea
               className="w-full rounded-xl border-slate-200 bg-slate-50 text-base py-3 px-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
               rows="3"
@@ -267,11 +273,12 @@ const PlanManagement = (props) => {
               placeholder='Enter Short Description'
               name='description'
               onChange={onInputChanges}
+              required
             ></textarea>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Price ($)</label>
+              <label className="text-sm font-bold text-slate-700 required-label">Price ($)</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">$</span>
                 <input
@@ -281,11 +288,12 @@ const PlanManagement = (props) => {
                   placeholder='Enter Price'
                   name='price'
                   onChange={onInputChanges}
+                  required
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Duration (Days)</label>
+              <label className="text-sm font-bold text-slate-700 required-label">Duration (Days)</label>
               <input
                 className="w-full rounded-xl border-slate-200 bg-slate-50 text-base py-3 px-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
                 type="number"
@@ -293,16 +301,18 @@ const PlanManagement = (props) => {
                 placeholder='Enter Duration'
                 name='duration'
                 onChange={onInputChanges}
+                required
               />
             </div>
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700">Type</label>
+            <label className="text-sm font-bold text-slate-700 required-label">Type</label>
             <select
               className="w-full rounded-xl border-slate-200 bg-slate-50 text-base py-3 px-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
               name='mealTime'
               value={mealTime}
               onChange={onMealTimeChange}
+              required
             >
               <option value="">Select Type</option>
               <option value="Lunch">Lunch</option>
@@ -311,7 +321,7 @@ const PlanManagement = (props) => {
             </select>
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700">Items</label>
+            <label className="text-sm font-bold text-slate-700 required-label">Items</label>
             {features?.map((feature, index) => (
               <div className="flex gap-2">
                 <input
@@ -320,6 +330,7 @@ const PlanManagement = (props) => {
                   value={feature}
                   placeholder='Enter Items'
                   onChange={(e) => onFeatureTextChanged(e, index)}
+                  required
                 />
                 <Button
                   variant="outline"

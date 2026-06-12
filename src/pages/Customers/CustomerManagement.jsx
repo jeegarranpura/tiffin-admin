@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { notification } from '../../utils/notification';
 
 const Button = React.lazy(() => import('../../components/Common/Button'));
 const Badge = React.lazy(() => import('../../components/Common/Badge'));
@@ -7,8 +8,9 @@ const SlideOver = React.lazy(() => import('../../components/Common/SlideOver'));
 const Modal = React.lazy(() => import('../../components/Common/Modal'));
 const GoogleMap = React.lazy(() => import('./Components/GoogleMap'));
 
+
 const CustomerManagement = (props) => {
-  const { customerList, isLoading, error, planList } = props;
+  const { customerList, isLoading, planList } = props;
   const [showAddModal, setShowAddModal] = useState(false);
   const [activeType, setActiveType] = useState('All');
   const [isEdit, setIsEdit] = useState(false);
@@ -102,6 +104,10 @@ const CustomerManagement = (props) => {
 
 
   const onHandleSubmit = async () => {
+    if(Object.values(inputData).some((val) => !val)) {
+      notification.error('All fields are mandatory!')
+      return;
+    }
     const createPayload = {
       name: inputData.name,
       phone: inputData.phone,
@@ -274,7 +280,7 @@ const CustomerManagement = (props) => {
           <div className="space-y-4">
             <h4 className="text-sm font-bold text-primary uppercase tracking-wider">Personal Information</h4>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-700">Full Name</label>
+              <label className="text-sm font-medium text-slate-700 required-label">Full Name</label>
               <input
                 className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400"
                 placeholder="e.g. John Doe"
@@ -282,10 +288,11 @@ const CustomerManagement = (props) => {
                 name="name"
                 value={inputData.name}
                 onChange={onHandleInputChange}
+                required
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-700">Phone Number</label>
+              <label className="text-sm font-medium text-slate-700 required-label">Phone Number</label>
               <input
                 className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400"
                 placeholder="+91 00000 00000"
@@ -293,10 +300,11 @@ const CustomerManagement = (props) => {
                 name="phone"
                 value={inputData.phone}
                 onChange={onHandleInputChange}
+                required
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-700">Full Delivery Address </label>
+              <label className="text-sm font-medium text-slate-700 required-label">Full Delivery Address </label>
               <textarea
                 className="w-full rounded-lg border border-slate-300 py-2 px-3 text-sm focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400 bg-slate-50"
                 placeholder="Select From Map"
@@ -308,7 +316,7 @@ const CustomerManagement = (props) => {
               />
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Latitude </label>
+                  <label className="text-sm font-medium text-slate-700 required-label">Latitude</label>
                   <input
                     className="w-full rounded-lg border border-slate-300 py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-slate-50"
                     name="latitude"
@@ -318,7 +326,7 @@ const CustomerManagement = (props) => {
                     type="text" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Longitude</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">Longitude</label>
                   <input
                     className="w-full rounded-lg border border-slate-300 py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-slate-50"
                     name="longitude"
@@ -339,11 +347,12 @@ const CustomerManagement = (props) => {
               <div className="text-sm font-medium text-green-700">Active</div>
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Customer Type</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">Customer Type</label>
                   <select className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-pointer"
                     name="type"
                     value={inputData.type}
                     onChange={onHandleInputChange}
+                    required
                   >
                     <option value="">Select Type</option>
                     <option value="monthly">Monthly</option>
@@ -351,11 +360,12 @@ const CustomerManagement = (props) => {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Meal Plan</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">Meal Plan</label>
                   <select className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-pointer"
                     name="planId"
                     value={inputData.planId}
                     onChange={onHandleInputChange}
+                    required
                   >
                     <option value="">Select Plan</option>
                     {planList.map((plan) => (
@@ -366,21 +376,22 @@ const CustomerManagement = (props) => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Start Date</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">Start Date</label>
                   <input
                     className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
                     name="startDate"
                     value={inputData.startDate}
                     onChange={onHandleInputChange}
+                    required
                     type="date" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">End Date</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">End Date</label>
                   <input
                     className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none"
                     name="endDate"
                     value={inputData.endDate}
-
+                    required
                     onChange={onHandleInputChange}
                     type="date" />
                 </div>
@@ -404,7 +415,7 @@ const CustomerManagement = (props) => {
               <div className="text-sm font-medium text-red-700">Expired</div>
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Customer Type</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">Customer Type</label>
                   <select className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-not-allowed"
                     name="type"
                     value={subscription.planType}
@@ -417,7 +428,7 @@ const CustomerManagement = (props) => {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Meal Plan</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">Meal Plan</label>
                   <select className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-not-allowed"
                     name="planId"
                     value={subscription.planId}
@@ -433,7 +444,7 @@ const CustomerManagement = (props) => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Start Date</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">Start Date</label>
                   <input
                     className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-not-allowed"
                     name="startDate"
@@ -443,7 +454,7 @@ const CustomerManagement = (props) => {
                     type="date" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">End Date</label>
+                  <label className="text-sm font-medium text-slate-700 required-label">End Date</label>
                   <input
                     className="w-full rounded-lg border border-slate-300 bg-white py-2 px-3 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none cursor-not-allowed"
                     name="endDate"

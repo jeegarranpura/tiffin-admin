@@ -71,3 +71,9 @@ body {
 .pac-container {
   z-index: 10001 !important;
 }
+
+.required-label::after {
+  content: '*';
+  color: red;
+  padding: 1px;
+}
